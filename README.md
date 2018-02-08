@@ -1,6 +1,6 @@
 # OverlayModalViewController
 
-[![CI Status](http://img.shields.io/travis/William Wang/OverlayModalViewController.svg?style=flat)](https://travis-ci.org/William Wang/OverlayModalViewController)
+[![CI Status](http://img.shields.io/travis/showang/OverlayModalViewController.svg?style=flat)](https://travis-ci.org/showang/OverlayModalViewController)
 [![Version](https://img.shields.io/cocoapods/v/OverlayModalViewController.svg?style=flat)](http://cocoapods.org/pods/OverlayModalViewController)
 [![License](https://img.shields.io/cocoapods/l/OverlayModalViewController.svg?style=flat)](http://cocoapods.org/pods/OverlayModalViewController)
 [![Platform](https://img.shields.io/cocoapods/p/OverlayModalViewController.svg?style=flat)](http://cocoapods.org/pods/OverlayModalViewController)
