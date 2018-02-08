@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'OverlayModalViewController_Example' do
+  pod 'OverlayModalViewController', :path => '../'
+
+  target 'OverlayModalViewController_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
