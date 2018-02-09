@@ -1,6 +1,6 @@
 //
-//  KKOverlayAddPlaylistBgView.swift
-//  KKBOX
+//  OverlayBackgroundScaleScreen.swift
+//  OverlayModalViewController
 //
 //  Created by William Wang on 21/12/2017.
 //
@@ -11,12 +11,13 @@ import UIKit
 @objc open class OverlayBackgroundScaleScreen: UIView, KKOverlayBackgroundViewDelegate {
     
 	let fullScreenImageView:UIImageView
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+	let blurView:UIVisualEffectView
     let scaleRatio:CGFloat
     
-    public init(screenImage:UIImage, scaleRatio:CGFloat = 0.8) {
+	public init(screenImage:UIImage, effect:UIBlurEffect = UIBlurEffect(style: .dark), scaleRatio:CGFloat = 0.8) {
 		let windowBounds = UIApplication.shared.keyWindow?.bounds ?? CGRect.zero
         self.scaleRatio = scaleRatio
+		self.blurView = UIVisualEffectView(effect: effect)
 		self.fullScreenImageView = UIImageView(frame: windowBounds)
         super.init(frame: windowBounds)
 		self.autoresizingMask = [.flexibleHeight, .flexibleWidth]

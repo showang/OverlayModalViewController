@@ -1,5 +1,5 @@
 //
-//  TestTableViewController.swift
+//  PanableTableViewController.swift
 //  OverlayModalViewController
 //
 //  Created by William Wang on 08/02/2018.
@@ -8,24 +8,23 @@
 
 import Foundation
 import UIKit
-import OverlayModalViewController
 
-class TestPanableTableViewController: UITableViewController, PanableViewController {
+open class PanableTableViewController: UITableViewController, PanedViewController, UIGestureRecognizerDelegate {
 	
 	private var tableViewDefaultOffset:CGFloat = 0
 	private var offsetYOfStartDragging:CGFloat = 0
 	
 	private var panHandler: PanControlHandler?
 	
-	init() {
+	public init() {
 		super.init(nibName: nil, bundle: nil)
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
+	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func loadView() {
+	override open func loadView() {
 		super.loadView()
 		// You can control offset by your self.
 		let navigationBarHeight:CGFloat = self.navigationController?.navigationBar.frame.height ?? 0
@@ -41,30 +40,30 @@ class TestPanableTableViewController: UITableViewController, PanableViewControll
 }
 
 //MARK: TableViewDelegate
-extension TestPanableTableViewController {
+extension PanableTableViewController {
 	
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+	override open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		return UITableViewCell()
 	}
 	
-	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+	override open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		cell.textLabel?.text = "Item \(indexPath.row)"
 	}
 	
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	override open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return 20
 	}
 	
 }
 
 //MARK: UIScrollViewDelegate
-extension TestPanableTableViewController {
+extension PanableTableViewController {
 	
-	override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+	override open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 		self.offsetYOfStartDragging = scrollView.contentOffset.y
 	}
 	
-	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+	override open func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		guard let panHandler = self.panHandler else {
 			return
 		}
@@ -82,7 +81,7 @@ extension TestPanableTableViewController {
 		}
 	}
 	
-	override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+	override open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 		self.panHandler?.finishPanedOffset(panContentFrame().origin.y)
 	}
 	
@@ -95,13 +94,13 @@ extension TestPanableTableViewController {
 }
 
 //MARK: PanableViewController
-extension TestPanableTableViewController {
+extension PanableTableViewController {
 	
-	func install(panHandler: PanControlHandler) {
+	public func install(panHandler: PanControlHandler) {
 		self.panHandler = panHandler
 	}
 	
-	func didUpdatePanOffset(_ offset: CGFloat, isAttachTop: Bool, isDettachTop: Bool) {
+	public func didUpdatePanOffset(_ offset: CGFloat, isAttachTop: Bool, isDettachTop: Bool) {
 		var navigationBarHeight:CGFloat = 0
 		if let navigationController = self.navigationController {
 			navigationBarHeight = navigationController.navigationBar.frame.height

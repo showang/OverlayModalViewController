@@ -1,6 +1,6 @@
 //
-//  KKOverlayViewController.swift
-//  KKBOX
+//  OverlayModalViewController.swift
+//  OverlayModalViewController
 //
 //  Created by William Wang on 19/12/2017.
 //
@@ -8,12 +8,13 @@
 import Foundation
 import UIKit
 
-open class OverlayModalViewController: UIViewController, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate {
+open class OverlayModalViewController: UIViewController, UIViewControllerTransitioningDelegate {
     
     private static let defaulDuration:Double = 0.3
     
     private weak var backgroundViewDelegate:KKOverlayBackgroundViewDelegate?
     fileprivate weak var backgroundView:UIView?
+	private var tabGestureDelegate:TapGestureDelegate?
     weak var delegate:KKOverlayPresentingViewControllerDelegate?
     var presentDuration = defaulDuration
     
@@ -21,9 +22,10 @@ open class OverlayModalViewController: UIViewController, UIGestureRecognizerDele
     var isTapBackgroundToDismiss = false {
         didSet {
             if tapGesture == nil {
+				tabGestureDelegate = TapGestureDelegate(parentViewController: self)
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(touchEvent(gestureReconizer:)))
                 tapGesture.numberOfTapsRequired = 1;
-                tapGesture.delegate = self
+                tapGesture.delegate = tabGestureDelegate
                 self.tapGesture = tapGesture
                 self.view.isUserInteractionEnabled = true
             }
@@ -44,7 +46,7 @@ open class OverlayModalViewController: UIViewController, UIGestureRecognizerDele
 	required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+	
 	public func gestureRecognizerShouldBegin(_ gr: UIGestureRecognizer) -> Bool {
         let location = gr.location(in: self.view!)
         for view in self.view.subviews {
@@ -118,6 +120,28 @@ open class OverlayModalViewController: UIViewController, UIGestureRecognizerDele
 	
 	override open func viewWillAppear(_ animated: Bool) {
 		self.backgroundViewDelegate?.overlayViewControllerWillPresent?(self, in: self.presentDuration)
+	}
+	
+	private class TapGestureDelegate:NSObject, UIGestureRecognizerDelegate {
+		
+		private let parent:UIViewController
+		init(parentViewController:UIViewController) {
+			self.parent = parentViewController
+		}
+		
+		public func gestureRecognizerShouldBegin(_ gr: UIGestureRecognizer) -> Bool {
+			let location = gr.location(in: self.parent.view!)
+			for view in self.parent.view.subviews {
+				if view.frame.contains(location) {
+					return false
+				}
+			}
+			return true
+		}
+		
+		@objc private func touchEvent(gestureReconizer: UIGestureRecognizer){
+			self.parent.dismiss(animated: true)
+		}
 	}
     
 }

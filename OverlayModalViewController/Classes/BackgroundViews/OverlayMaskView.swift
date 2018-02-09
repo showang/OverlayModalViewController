@@ -1,6 +1,6 @@
 //
 //  KKOverlayShadowMaskView.swift
-//  KKBOX
+//  OverlayModalViewController
 //
 //  Created by William Wang on 19/12/2017.
 //

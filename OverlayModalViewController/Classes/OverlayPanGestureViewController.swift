@@ -1,6 +1,6 @@
 //
-//  OverlayerPanableViewController.swift
-//  KKBOX
+//  OverlayPanGestureViewController.swift
+//  OverlayModalViewController
 //
 //  Created by William Wang on 31/01/2018.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-@objc public protocol PanableViewController {
+@objc public protocol PanedViewController {
 	func install(panHandler:PanControlHandler)
 	func didUpdatePanOffset(_ offset:CGFloat, isAttachTop:Bool, isDettachTop:Bool)
 }
@@ -21,10 +21,10 @@ import UIKit
 	func dismiss()
 	
 	func installPanControlHandler(_ viewController:UIViewController)
-	func uninstallPanControllerHandler(_ panableViewController:PanableViewController)
+	func uninstallPanControllerHandler(_ panableViewController:PanedViewController)
 }
 
-@objc open class OverlayPanableViewController : OverlayModalViewController, PanControlHandler {
+@objc open class OverlayPanGestureViewController : OverlayModalViewController, PanControlHandler {
 	private var pinOffset:CGFloat = 150
 	private var expendOffset:CGFloat = 100
 	private var dismissOffset:CGFloat = 450
@@ -36,11 +36,12 @@ import UIKit
 	private let pinRatio:CGFloat
 	private let expendRatio:CGFloat
 	private let dismissRatio:CGFloat
+	private var panGestureDelegate:PanGestureDelegate?
 	private let rootViewController:UIViewController
 	
 	private var panBeginY:CGFloat = 0.0
 	private var attachedTop = false
-	private var panableViewController:PanableViewController?
+	private var panableViewController:PanedViewController?
 	
 	public init(rootViewController:UIViewController) {
 		self.pinRatio = -1
@@ -77,6 +78,17 @@ import UIKit
 		if self.modalPresentationStyle != .popover {
 			let panGestureRcognizer = UIPanGestureRecognizer(target: self, action: #selector(panGestureUpdate(inPanGestureRecognizer:)))
 			self.rootViewController.view.addGestureRecognizer(panGestureRcognizer)
+			self.panGestureDelegate = PanGestureDelegate()
+			panGestureRcognizer.delegate = self.panGestureDelegate
+		}
+	}
+	
+	private class PanGestureDelegate:NSObject, UIGestureRecognizerDelegate {
+		public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+			if gestureRecognizer.view?.isKind(of: UIScrollView.classForCoder()) ?? false{
+				return false
+			}
+			return true
 		}
 	}
 	
@@ -96,7 +108,7 @@ import UIKit
 	}
 	
 	public func installPanControlHandler(_ viewController:UIViewController){
-		if let panableVC = viewController as? PanableViewController {
+		if let panableVC = viewController as? PanedViewController {
 			panableVC.install(panHandler: self)
 			panableViewController = panableVC
 		}else {
@@ -106,7 +118,7 @@ import UIKit
 		}
 	}
 	
-	public func uninstallPanControllerHandler(_ panableViewController: PanableViewController) {
+	public func uninstallPanControllerHandler(_ panableViewController: PanedViewController) {
 		if let panableVC = self.panableViewController, panableVC === panableViewController {
 			self.panableViewController = nil
 		}
@@ -124,7 +136,8 @@ import UIKit
 			}
 			isChangedBySelf = true
 		case .changed:
-			let changedY = self.panBeginY + inPanGestureRecognizer.translation(in: self.view).y
+			let point = inPanGestureRecognizer.translation(in: self.view)
+			let changedY = self.panBeginY + point.y
 			var safeAreaOffset:CGFloat = 0
 			if self.rootViewController is UINavigationController {
 				safeAreaOffset = safeAreaTop()
@@ -146,7 +159,7 @@ import UIKit
 		let x = rootViewFrame.origin.x
 		var y:CGFloat
 		let lastFrame:CGRect
-		if self.rootViewController is UINavigationController {
+		if self.rootViewController is UINavigationController || self.rootViewController.view is UIScrollView {
 			let safeAreaTop = self.safeAreaTop()
 			let rootViewOffset = rootViewFrame.origin.y
 			let isPanTop = (changedY < safeAreaTop && rootViewOffset > 0) || changedY < 0
@@ -159,7 +172,8 @@ import UIKit
 			}
 			lastFrame = CGRect(x: x, y: y, width: viewSize.width, height: viewSize.height - y)
 			self.attachedTop = y == 0
-		} else {
+		}
+		else {
 			y = changedY
 			lastFrame = CGRect(x: x, y: y, width: viewSize.width, height: viewSize.height)
 		}
@@ -191,7 +205,7 @@ import UIKit
 			return
 		}
 		self.isDettachTop = self.preTopOffset == 0 && topOffset != 0
-		self.isAttachTop = topOffset == 0 && self.preTopOffset != 0
+		self.isAttachTop = topOffset <= 0 && self.preTopOffset != 0
 		self.panableViewController?.didUpdatePanOffset(topOffset, isAttachTop: isAttachTop, isDettachTop: isDettachTop)
 		self.preTopOffset = topOffset
 	}

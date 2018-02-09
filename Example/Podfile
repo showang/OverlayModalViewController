@@ -1,6 +1,7 @@
 use_frameworks!
 
 target 'OverlayModalViewController_Example' do
+  platform:'ios','8.0'
   pod 'OverlayModalViewController', :path => '../'
 
   target 'OverlayModalViewController_Tests' do

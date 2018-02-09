@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-class TestContentViewController: UIViewController {
+class ExampleNormalViewController: UIViewController {
 	
 	override func loadView() {
 		super.loadView()
-		self.view.backgroundColor = .blue
+		self.view.backgroundColor = .red
 	}
 	
 	override func viewDidLoad() {
