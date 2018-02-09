@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'OverlayModalViewController'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of OverlayModalViewController.'
+  s.summary          = 'A super class to help you present effects overlay view controller easyly.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,9 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.description      = 'Support different background effects with custom interface, and support pan gesture to help you dismiss view controller easyly.'
 
   s.homepage         = 'https://github.com/showang/OverlayModalViewController'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
