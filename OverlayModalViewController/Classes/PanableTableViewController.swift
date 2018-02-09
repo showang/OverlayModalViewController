@@ -11,10 +11,10 @@ import UIKit
 
 open class PanableTableViewController: UITableViewController, PanedViewController, UIGestureRecognizerDelegate {
 	
-	private var tableViewDefaultOffset:CGFloat = 0
-	private var offsetYOfStartDragging:CGFloat = 0
+	fileprivate var tableViewDefaultOffset:CGFloat = 0
+	fileprivate var offsetYOfStartDragging:CGFloat = 0
 	
-	private var panHandler: PanControlHandler?
+	fileprivate var panHandler: PanControlHandler?
 	
 	public init() {
 		super.init(nibName: nil, bundle: nil)
