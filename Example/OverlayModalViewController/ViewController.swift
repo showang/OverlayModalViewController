@@ -20,13 +20,24 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		initBackgroundViewImage()
-		var preButton = initTestNormalViewController()
+		var preButton = initPanableNormalViewController()
+		preButton = initPanableNavigationController(preButton)
 		preButton = initPanableTableViewController(preButton)
-		initTestPanableNavigationTableViewButton(preButton)
+		initPanableNavigationTableViewButton(preButton)
 		initOverlayBackgroundStyleSelector()
 	}
 	
-	private func initTestNormalViewController() -> UIButton{
+	private func initPanableNavigationController(_ preButton:UIButton) -> UIButton {
+		let button = UIButton()
+		self.view.addSubview(button)
+		button.setTitle("Panable NavigationViewController", for: .normal)
+		button.setTitleColor(UIColor.blue, for: .normal)
+		appendButton(button, preButton: preButton)
+		button.addTarget(self, action: #selector(presentPanableNavigationViewController), for: .touchUpInside)
+		return button
+	}
+	
+	private func initPanableNormalViewController() -> UIButton{
 		let button = UIButton()
 		self.view.addSubview(button)
 		button.setTitle("Panable ViewController", for: .normal)
@@ -46,13 +57,21 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 		return button
 	}
 	
-	private func initTestPanableNavigationTableViewButton(_ preButton:UIButton){
+	private func initPanableNavigationTableViewButton(_ preButton:UIButton){
 		let button = UIButton()
 		self.view.addSubview(button)
 		button.setTitle("Panable TableView with NavigationBar", for: .normal)
 		button.setTitleColor(UIColor.blue, for: .normal)
 		appendButton(button, preButton: preButton)
 		button.addTarget(self, action: #selector(presentNavigationPanableTableViewController), for: .touchUpInside)
+	}
+	
+	@objc func presentPanableNavigationViewController() {
+		let internalViewController = ExampleNormalViewController()
+		internalViewController.title = "NavigationBar"
+		let navigationController = UINavigationController(rootViewController: internalViewController)
+		let panableViewController = OverlayPanGestureViewController(rootViewController: navigationController, pinRatio: 0.8, expendRatio: 0.9, dismissRatio: 0.5)
+		panableViewController.presentOverlay(background: currentBackground(background))
 	}
 	
 	@objc func presentPanableViewController() {

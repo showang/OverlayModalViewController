@@ -13,7 +13,7 @@ class ExampleNormalViewController: UIViewController {
 	
 	override func loadView() {
 		super.loadView()
-		self.view.backgroundColor = .red
+		self.view.backgroundColor = .white
 	}
 	
 	override func viewDidLoad() {
