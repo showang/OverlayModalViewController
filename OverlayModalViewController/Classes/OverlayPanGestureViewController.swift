@@ -25,23 +25,23 @@ import UIKit
 }
 
 @objc open class OverlayPanGestureViewController : OverlayModalViewController, PanControlHandler {
-	private var pinOffset:CGFloat = 150
-	private var expendOffset:CGFloat = 100
-	private var dismissOffset:CGFloat = 450
-	private var preTopOffset:CGFloat = 150
-	private var isChangedBySelf = false // For workaround
-	private var isDettachTop = false
-	private var isAttachTop = false
-	private let isInitByRatio:Bool
-	private let pinRatio:CGFloat
-	private let expendRatio:CGFloat
-	private let dismissRatio:CGFloat
+	fileprivate var pinOffset:CGFloat = 150
+	fileprivate var expendOffset:CGFloat = 100
+	fileprivate var dismissOffset:CGFloat = 450
+	fileprivate var preTopOffset:CGFloat = 150
+	fileprivate var isChangedBySelf = false // For workaround
+	fileprivate var isDettachTop = false
+	fileprivate var isAttachTop = false
+	fileprivate let isInitByRatio:Bool
+	fileprivate let pinRatio:CGFloat
+	fileprivate let expendRatio:CGFloat
+	fileprivate let dismissRatio:CGFloat
 	private var panGestureDelegate:PanGestureDelegate?
-	private let rootViewController:UIViewController
+	fileprivate let rootViewController:UIViewController
 	
-	private var panBeginY:CGFloat = 0.0
-	private var attachedTop = false
-	private var panableViewController:PanedViewController?
+	fileprivate var panBeginY:CGFloat = 0.0
+	fileprivate var attachedTop = false
+	fileprivate var panableViewController:PanedViewController?
 	
 	public init(rootViewController:UIViewController) {
 		self.pinRatio = -1

@@ -10,15 +10,16 @@ import UIKit
 
 open class OverlayModalViewController: UIViewController, UIViewControllerTransitioningDelegate {
     
-    private static let defaulDuration:Double = 0.3
+    fileprivate static let defaulDuration:Double = 0.3
     
-    private weak var backgroundViewDelegate:KKOverlayBackgroundViewDelegate?
+    fileprivate weak var backgroundViewDelegate:KKOverlayBackgroundViewDelegate?
     fileprivate weak var backgroundView:UIView?
 	private var tabGestureDelegate:TapGestureDelegate?
-    weak var delegate:KKOverlayPresentingViewControllerDelegate?
-    var presentDuration = defaulDuration
+    fileprivate var presentDuration = defaulDuration
+	
+	weak var delegate:KKOverlayPresentingViewControllerDelegate?
     
-    private var tapGesture:UITapGestureRecognizer?
+    fileprivate var tapGesture:UITapGestureRecognizer?
     var isTapBackgroundToDismiss = false {
         didSet {
             if tapGesture == nil {
