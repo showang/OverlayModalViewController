@@ -215,7 +215,7 @@ import UIKit
 	}
 	
 	public func safeAreaTop() -> CGFloat {
-		var safeAreaTop:CGFloat = 0
+		var safeAreaTop:CGFloat = UIApplication.shared.statusBarFrame.height
 		if #available(iOS 11.0, *) {
 			safeAreaTop = self.view.safeAreaInsets.top
 		}
