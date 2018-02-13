@@ -33,24 +33,8 @@ class ExampleViewController: OverlayModalViewController, PanedViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		contentView.backgroundColor = .white
-		if let frame = self.frame {
-			contentView.frame = frame
-		} else {
-			contentView.frame = self.view.frame
-		}
-		self.view.addSubview(contentView)
-		
-		contentView.addSubview(messageLabel)
-		messageLabel.text = message
-		messageLabel.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 11.0, *), self.navigationController != nil {
-			NSLayoutConstraint(item: messageLabel, attribute: .top, relatedBy: .equal, toItem: contentView.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 100).isActive = true
-		} else {
-			NSLayoutConstraint(item: messageLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 100).isActive = true
-		}
-		NSLayoutConstraint(item: messageLabel, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+		initContentView()
+		initMessageLabel()
 	}
 	
 	override func dismiss(animated flag: Bool, completion: (() -> ())?) {
@@ -59,6 +43,44 @@ class ExampleViewController: OverlayModalViewController, PanedViewController {
 			return
 		}
 		super.dismiss(animated: flag, completion: completion)
+	}
+	
+	private func initContentView() {
+		contentView.backgroundColor = .white
+		contentView.translatesAutoresizingMaskIntoConstraints = false
+		self.view.addSubview(contentView)
+		if let frame = self.frame {
+			let width = frame.width
+			let height = frame.height
+			NSLayoutConstraint(item: contentView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+			NSLayoutConstraint(item: contentView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+			NSLayoutConstraint(item: contentView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width).isActive = true
+			NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: height).isActive = true
+		} else {
+			if #available(iOS 11.0, *) {
+				NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0).isActive = true
+				NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+			} else {
+				NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0).isActive = true
+				NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+			}
+			NSLayoutConstraint(item: contentView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+			NSLayoutConstraint(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+			
+		}
+		
+	}
+	
+	private func initMessageLabel() {
+		self.contentView.addSubview(messageLabel)
+		messageLabel.text = message
+		messageLabel.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 11.0, *), self.navigationController != nil {
+			NSLayoutConstraint(item: messageLabel, attribute: .top, relatedBy: .equal, toItem: contentView.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 100).isActive = true
+		} else {
+			NSLayoutConstraint(item: messageLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 100).isActive = true
+		}
+		NSLayoutConstraint(item: messageLabel, attribute: .centerX, relatedBy: .equal, toItem: contentView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
 	}
 	
 }
