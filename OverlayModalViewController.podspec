@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OverlayModalViewController'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'A super class to help you present effects overlay view controller easyly.'
 
 # This description is used to generate tags and improve search results.
