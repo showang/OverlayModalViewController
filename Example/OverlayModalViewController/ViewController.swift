@@ -20,74 +20,73 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		initBackgroundViewImage()
-		var preButton = initPanableNormalViewController()
+		var preButton = initNormalOverlayViewController()
+		preButton = initPanableNormalViewController(preButton)
 		preButton = initPanableNavigationController(preButton)
 		preButton = initPanableTableViewController(preButton)
 		initPanableNavigationTableViewButton(preButton)
 		initOverlayBackgroundStyleSelector()
 	}
 	
-	private func initPanableNavigationController(_ preButton:UIButton) -> UIButton {
-		let button = UIButton()
-		self.view.addSubview(button)
-		button.setTitle("Panable NavigationViewController", for: .normal)
-		button.setTitleColor(UIColor.blue, for: .normal)
-		appendButton(button, preButton: preButton)
-		button.addTarget(self, action: #selector(presentPanableNavigationViewController), for: .touchUpInside)
-		return button
+	private func initNormalOverlayViewController() -> UIButton {
+		return initExampleButton(title: "Normal OverlayViewController", selector: #selector(presentOverlayViewController))
 	}
 	
-	private func initPanableNormalViewController() -> UIButton{
-		let button = UIButton()
-		self.view.addSubview(button)
-		button.setTitle("Panable ViewController", for: .normal)
-		button.setTitleColor(UIColor.blue, for: .normal)
-		appendButton(button, preButton: nil)
-		button.addTarget(self, action: #selector(presentPanableViewController), for: .touchUpInside)
-		return button
+	private func initPanableNormalViewController(_ preButton:UIButton) -> UIButton{
+		return initExampleButton(title: "Panable OverlayViewController", selector: #selector(presentPanableViewController), preButton: preButton)
+	}
+	
+	private func initPanableNavigationController(_ preButton:UIButton) -> UIButton {
+		return initExampleButton(title: "Panable NavigationViewController", selector: #selector(presentPanableNavigationViewController), preButton: preButton)
 	}
 	
 	private func initPanableTableViewController(_ preButton:UIButton) -> UIButton {
-		let button = UIButton()
-		self.view.addSubview(button)
-		button.setTitle("Panable TableView", for: .normal)
-		button.setTitleColor(UIColor.blue, for: .normal)
-		appendButton(button, preButton: preButton)
-		button.addTarget(self, action: #selector(presentPanableTableViewController), for: .touchUpInside)
-		return button
+		return initExampleButton(title: "Panable TableView", selector: #selector(presentPanableTableViewController), preButton: preButton)
 	}
 	
 	private func initPanableNavigationTableViewButton(_ preButton:UIButton){
+		_ = initExampleButton(title: "Panable TableView with NavigationBar", selector: #selector(presentNavigationPanableTableViewController), preButton: preButton)
+	}
+	
+	private func initExampleButton(title:String, selector:Selector, preButton:UIButton? = nil) -> UIButton{
 		let button = UIButton()
 		self.view.addSubview(button)
-		button.setTitle("Panable TableView with NavigationBar", for: .normal)
+		button.setTitle(title, for: .normal)
 		button.setTitleColor(UIColor.blue, for: .normal)
 		appendButton(button, preButton: preButton)
-		button.addTarget(self, action: #selector(presentNavigationPanableTableViewController), for: .touchUpInside)
+		button.addTarget(self, action: selector, for: .touchUpInside)
+		return button
+	}
+	
+	@objc func presentOverlayViewController() {
+		let frame = self.view.frame
+		let overlayViewController = ExampleViewController(message: "Normal OverlayViewController", frame: CGRect(x: 20, y: 100, width: frame.width - 40, height: frame.height - 200))
+		overlayViewController.presentOverlay(background: currentBackground(background))
+	}
+	
+	@objc func presentPanableViewController() {
+		let frame = self.view.frame
+		let internalViewController = ExampleViewController(message: "Panable OverlayViewController", frame: CGRect(x: 20, y: 100, width: frame.width - 40, height: frame.height - 200))
+		let panableViewController = OverlayPanGestureViewController(rootViewController: internalViewController, pinRatio: 1, expendRatio: 1, dismissRatio: 0.5)
+		panableViewController.presentOverlay(background: currentBackground(background))
 	}
 	
 	@objc func presentPanableNavigationViewController() {
-		let internalViewController = ExampleNormalViewController()
+		let internalViewController = ExampleViewController(message: "Panable with NavigationController")
 		internalViewController.title = "NavigationBar"
 		let navigationController = UINavigationController(rootViewController: internalViewController)
 		let panableViewController = OverlayPanGestureViewController(rootViewController: navigationController, pinRatio: 0.8, expendRatio: 0.9, dismissRatio: 0.5)
 		panableViewController.presentOverlay(background: currentBackground(background))
 	}
 	
-	@objc func presentPanableViewController() {
-		let internalViewController = ExampleNormalViewController()
-		let panableViewController = OverlayPanGestureViewController(rootViewController: internalViewController, pinRatio: 0.8, expendRatio: 0.9, dismissRatio: 0.5)
-		panableViewController.presentOverlay(background: currentBackground(background))
-	}
-	
 	@objc func presentPanableTableViewController() {
-		let panableTableViewController = PanableTableViewController()
+		let panableTableViewController = ExampleTableViewController()
 		let panableViewController = OverlayPanGestureViewController(rootViewController: panableTableViewController, pinRatio: 0.8, expendRatio: 0.9, dismissRatio: 0.5)
 		panableViewController.presentOverlay(background: currentBackground(background))
 	}
 	
 	@objc func presentNavigationPanableTableViewController() {
-		let panableTableViewController = PanableTableViewController()
+		let panableTableViewController = ExampleTableViewController()
 		panableTableViewController.title = "NavigationBar + TableView"
 		let navigationBar = UINavigationController(rootViewController: panableTableViewController)
 		let panableViewController = OverlayPanGestureViewController(rootViewController: navigationBar, pinRatio: 0.8, expendRatio: 0.9, dismissRatio: 0.5)
@@ -137,9 +136,9 @@ extension ViewController {
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		switch row {
 		case 0:
-			return "Fading mask dark"
+			return "Dark mask fade in"
 		case 1:
-			return "Scale blure background"
+			return "Scale background and blur"
 		default:
 			return "None"
 		}
@@ -157,7 +156,7 @@ extension ViewController {
 	private func appendButton(_ button:UIButton, preButton:UIButton?) {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		if let preButton = preButton {
-			NSLayoutConstraint(item: button, attribute: .top, relatedBy: .equal, toItem: preButton, attribute: .bottom, multiplier: 1, constant: 48).isActive = true
+			NSLayoutConstraint(item: button, attribute: .top, relatedBy: .equal, toItem: preButton, attribute: .bottom, multiplier: 1, constant: 40).isActive = true
 		}
 		else {
 			if #available(iOS 11.0, *) {

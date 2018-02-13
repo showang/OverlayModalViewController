@@ -12,7 +12,7 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
     
     fileprivate static let defaulDuration:Double = 0.3
     
-    fileprivate weak var backgroundViewDelegate:KKOverlayBackgroundViewDelegate?
+    fileprivate weak var backgroundViewDelegate:OverlayBackgroundView?
     fileprivate weak var backgroundView:UIView?
 	private var tabGestureDelegate:TapGestureDelegate?
     fileprivate var presentDuration = defaulDuration
@@ -20,7 +20,7 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
 	weak var delegate:KKOverlayPresentingViewControllerDelegate?
     
     fileprivate var tapGesture:UITapGestureRecognizer?
-    var isTapBackgroundToDismiss = false {
+    public var isTapBackgroundToDismiss = false {
         didSet {
             if tapGesture == nil {
 				tabGestureDelegate = TapGestureDelegate(parentViewController: self)
@@ -40,7 +40,7 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
         }
     }
     
-    init() {
+    public init() {
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -99,7 +99,7 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
 			return
 		}
 		bgView.translatesAutoresizingMaskIntoConstraints = false
-		if let viewDelegate = bgView as? KKOverlayBackgroundViewDelegate {
+		if let viewDelegate = bgView as? OverlayBackgroundView {
 			backgroundViewDelegate = viewDelegate
 			if backgroundViewDelegate?.requireTransparentBackground?() ?? true {
 				if self.modalPresentationStyle == .fullScreen {
@@ -147,7 +147,7 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
     
 }
 
-@objc protocol KKOverlayBackgroundViewDelegate {
+@objc protocol OverlayBackgroundView {
 	
 	@objc optional func requireTransparentBackground() -> Bool
     

@@ -10,7 +10,7 @@ import UIKit
 
 @objc public protocol PanedViewController {
 	func install(panHandler:PanControlHandler)
-	func didUpdatePanOffset(_ offset:CGFloat, isAttachTop:Bool, isDettachTop:Bool)
+	func didUpdatePanOffset(_ offset:CGFloat, isAttachTop:Bool, isDettachTop:Bool, isAnimation:Bool)
 }
 
 @objc public protocol PanControlHandler {
@@ -107,11 +107,12 @@ import UIKit
 		dismissOffset = viewControllerHeight * (1 - dismissRatio)
 	}
 	
-	public func installPanControlHandler(_ viewController:UIViewController){
+	public func installPanControlHandler(_ viewController:UIViewController) {
 		if let panableVC = viewController as? PanedViewController {
 			panableVC.install(panHandler: self)
 			panableViewController = panableVC
-		}else {
+		}
+		else {
 			for childVC in viewController.childViewControllers {
 				installPanControlHandler(childVC)
 			}
@@ -167,7 +168,7 @@ import UIKit
 			if rootViewOffset == 0 && changedY > 0 { // when attaching top to pan down
 				y -= safeAreaTop
 				if y < safeAreaTop { // workaround: Navigation bar offset will going wrong when y < 1
-					y += safeAreaTop + safeAreaTop
+					y += safeAreaTop + (self.isChangedBySelf ? 0 : safeAreaTop)
 				}
 			}
 			lastFrame = CGRect(x: x, y: y, width: viewSize.width, height: viewSize.height - y)
@@ -182,11 +183,12 @@ import UIKit
 			UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
 				self.rootViewController.view.frame = lastFrame
 			})
-			self.updatePanableViewControllers(y)
+			updatePanableViewControllers(y, isAnimation: true)
 		} else {
 			self.rootViewController.view.frame = lastFrame
+			updatePanableViewControllers(y)
 		}
-		updatePanableViewControllers(y)
+		
 	}
 	
 	public func finishPanedOffset(_ y:CGFloat) {
@@ -200,13 +202,13 @@ import UIKit
 		}
 	}
 	
-	private func updatePanableViewControllers(_ topOffset:CGFloat) {
+	private func updatePanableViewControllers(_ topOffset:CGFloat, isAnimation:Bool = false) {
 		if self.preTopOffset == 0 && topOffset == 0 {
 			return
 		}
 		self.isDettachTop = self.preTopOffset == 0 && topOffset != 0
 		self.isAttachTop = topOffset <= 0 && self.preTopOffset != 0
-		self.panableViewController?.didUpdatePanOffset(topOffset, isAttachTop: isAttachTop, isDettachTop: isDettachTop)
+		self.panableViewController?.didUpdatePanOffset(topOffset, isAttachTop: isAttachTop, isDettachTop: isDettachTop, isAnimation: isAnimation)
 		self.preTopOffset = topOffset
 	}
 	

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-@objc open class OverlayMaskView: UIView, KKOverlayBackgroundViewDelegate {
+@objc open class OverlayMaskView: UIView, OverlayBackgroundView {
 
     private static let defaultEndAlpha:CGFloat = 0.5
     

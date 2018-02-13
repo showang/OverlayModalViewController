@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-@objc open class OverlayBackgroundScaleScreen: UIView, KKOverlayBackgroundViewDelegate {
+@objc open class OverlayBackgroundScaleScreen: UIView, OverlayBackgroundView {
     
 	let fullScreenImageView:UIImageView
 	let blurView:UIVisualEffectView
@@ -37,9 +37,11 @@ import UIKit
         UIView.animate(withDuration: duration) {
             let preW = self.fullScreenImageView.frame.width
             let preH = self.fullScreenImageView.frame.height
-            let w = preW * self.scaleRatio
-            let h = preH * self.scaleRatio
-            let endFrame = CGRect(x: (preW - w) / 2, y: (preH - h) / 2, width: w, height: h)
+            let w = floor(preW * self.scaleRatio)
+            let h = floor(preH * self.scaleRatio)
+			let x = floor((preW - w) / 2)
+			let y = floor((preH - h) / 2)
+            let endFrame = CGRect(x: x, y: y, width: w, height: h)
             
             self.fullScreenImageView.frame = endFrame
             self.blurView.frame = endFrame

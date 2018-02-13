@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		34B68F3C202C5D6500871E61 /* ExampleNormalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B68F3B202C5D6500871E61 /* ExampleNormalViewController.swift */; };
-		34B68F3D202C5D6500871E61 /* ExampleNormalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B68F3B202C5D6500871E61 /* ExampleNormalViewController.swift */; };
+		348D1B642032BE770014C89E /* ExampleTableViewComtroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348D1B632032BE770014C89E /* ExampleTableViewComtroller.swift */; };
+		34B68F3C202C5D6500871E61 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B68F3B202C5D6500871E61 /* ExampleViewController.swift */; };
+		34B68F3D202C5D6500871E61 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B68F3B202C5D6500871E61 /* ExampleViewController.swift */; };
 		5D4224EFA5255A041766A8BE /* Pods_OverlayModalViewController_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A53DDB5063E0E6B72F0F69 /* Pods_OverlayModalViewController_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -30,7 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		34B68F3B202C5D6500871E61 /* ExampleNormalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleNormalViewController.swift; sourceTree = "<group>"; };
+		348D1B632032BE770014C89E /* ExampleTableViewComtroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleTableViewComtroller.swift; sourceTree = "<group>"; };
+		34B68F3B202C5D6500871E61 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
 		48DC1B39BAFF0D7B0FCA78C9 /* Pods-OverlayModalViewController_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OverlayModalViewController_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OverlayModalViewController_Tests/Pods-OverlayModalViewController_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* OverlayModalViewController_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OverlayModalViewController_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,7 +88,8 @@
 		34B68F36202C51B100871E61 /* SubViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				34B68F3B202C5D6500871E61 /* ExampleNormalViewController.swift */,
+				34B68F3B202C5D6500871E61 /* ExampleViewController.swift */,
+				348D1B632032BE770014C89E /* ExampleTableViewComtroller.swift */,
 			);
 			path = SubViewControllers;
 			sourceTree = "<group>";
@@ -386,7 +389,8 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				34B68F3C202C5D6500871E61 /* ExampleNormalViewController.swift in Sources */,
+				348D1B642032BE770014C89E /* ExampleTableViewComtroller.swift in Sources */,
+				34B68F3C202C5D6500871E61 /* ExampleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34B68F3D202C5D6500871E61 /* ExampleNormalViewController.swift in Sources */,
+				34B68F3D202C5D6500871E61 /* ExampleViewController.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
