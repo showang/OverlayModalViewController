@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/OverlayModalViewController.svg?style=flat)](http://cocoapods.org/pods/OverlayModalViewController)
 [![Platform](https://img.shields.io/cocoapods/p/OverlayModalViewController.svg?style=flat)](http://cocoapods.org/pods/OverlayModalViewController)
 
-A simple view controller super class to help you make overlay present easiler.
+A simple view controller super class to help you make overlay present easier.
 (By using native modal present method.)
 
 
