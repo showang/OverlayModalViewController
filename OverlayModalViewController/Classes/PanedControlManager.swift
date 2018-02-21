@@ -107,9 +107,7 @@ import Foundation
 			barFrame.origin.y = isAttachedTop ? safeAreaTop : 0
 			navigationBar.frame = barFrame
 		}
-		
 	}
-	
 }
 
 fileprivate protocol SafeAreaHandler {
@@ -126,7 +124,7 @@ fileprivate class SafeAreaHandlerIOS11: SafeAreaHandler {
 		}
 		else if isAttachTop {
 			tableViewOffset = -navigationAndSafeAreaOffset
-			if isAnimation {
+			if isAnimation && navigationBar != nil {
 				tableViewOffset = -navigationBarHeight
 			}
 		}
@@ -136,8 +134,14 @@ fileprivate class SafeAreaHandlerIOS11: SafeAreaHandler {
 
 fileprivate class SafeAreaHandlerIOS10: SafeAreaHandler {
 	func handleNavigationBar(_ navigationBar: UINavigationBar?, with scrollView: UIScrollView?, defaultOffset:CGFloat, safeAreaTop:CGFloat, isAttachTop: Bool, isDettachTop: Bool, isAnimation: Bool) {
-			let navigationBarHeight:CGFloat = navigationBar?.frame.height ?? 0
-			var tableViewOffset = defaultOffset
+		var tableViewOffset = defaultOffset
+		if navigationBar != nil {
+			if isDettachTop || isAttachTop {
+				return
+			}
+		}
+		else {
+			let navigationBarHeight:CGFloat = 0
 			if isDettachTop {
 				tableViewOffset = -navigationBarHeight
 				if navigationBarHeight == 0 {
@@ -153,27 +157,39 @@ fileprivate class SafeAreaHandlerIOS10: SafeAreaHandler {
 				scrollView?.contentInset = inset
 				scrollView?.scrollIndicatorInsets = inset
 			}
-			scrollView?.contentOffset = CGPoint(x: 0, y: tableViewOffset)
+		}
+		scrollView?.contentOffset = CGPoint(x: 0, y: tableViewOffset)
 	}
 }
 
 fileprivate class SafeAreaHandlerIOS9: SafeAreaHandler {
 	func handleNavigationBar(_ navigationBar: UINavigationBar?, with scrollView: UIScrollView?, defaultOffset:CGFloat, safeAreaTop:CGFloat, isAttachTop: Bool, isDettachTop: Bool, isAnimation: Bool) {
-			let navigationBarHeight:CGFloat = navigationBar?.frame.height ?? 0
-			var tableViewOffset = defaultOffset
+		var tableViewOffset = defaultOffset
+		if navigationBar != nil {
 			if isDettachTop {
-				tableViewOffset = -navigationBarHeight
+				self.updateNavigationBar(navigationBar, for: safeAreaTop, whenAttachedTop: false)
+				return
+			}
+			else if isAttachTop {
+				self.updateNavigationBar(navigationBar, for: safeAreaTop, whenAttachedTop: true)
+				return
+			}
+		}
+		else {
+			if isDettachTop {
+				tableViewOffset = 0
 				updateNavigationBar(navigationBar, for: safeAreaTop, whenAttachedTop: false)
 			}
 			else if isAttachTop {
-				let offset:CGFloat = navigationBarHeight == 0 ? safeAreaTop : navigationBarHeight
+				let offset:CGFloat = safeAreaTop
 				tableViewOffset = -offset
 				let inset = UIEdgeInsetsMake(offset, 0, 0, 0)
 				scrollView?.contentInset = inset
 				scrollView?.scrollIndicatorInsets = inset
 				updateNavigationBar(navigationBar, for: safeAreaTop, whenAttachedTop: true)
 			}
-			scrollView?.contentOffset = CGPoint(x: 0, y: tableViewOffset)
+		}
+		scrollView?.contentOffset = CGPoint(x: 0, y: tableViewOffset)
 	}
 		
 	private func updateNavigationBar(_ navigationBar:UINavigationBar?,for safeAreaTop:CGFloat, whenAttachedTop isAttachedTop:Bool) {

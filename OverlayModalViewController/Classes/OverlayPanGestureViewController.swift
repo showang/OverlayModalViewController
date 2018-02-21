@@ -185,10 +185,15 @@ import UIKit
 			})
 			updatePanableViewControllers(y, isAnimation: true)
 		} else {
-			self.rootViewController.view.frame = lastFrame
-			updatePanableViewControllers(y)
+			if #available(iOS 11, *){
+				self.rootViewController.view.frame = lastFrame
+				updatePanableViewControllers(y)
+			}
+			else {
+				updatePanableViewControllers(y)
+				self.rootViewController.view.frame = lastFrame
+			}
 		}
-		
 	}
 	
 	public func finishPanedOffset(_ y:CGFloat) {
