@@ -241,5 +241,8 @@ class SwipeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 				})
 			}
 		}
+		let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!
+		// Fix layout bug in iOS 9+
+		toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
 	}
 }
