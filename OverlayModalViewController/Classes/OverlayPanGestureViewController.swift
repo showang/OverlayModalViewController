@@ -185,7 +185,7 @@ import UIKit
 			})
 			updatePanableViewControllers(y, isAnimation: true)
 		} else {
-			if #available(iOS 11, *){
+			if #available(iOS 10.3.2, *){
 				self.rootViewController.view.frame = lastFrame
 				updatePanableViewControllers(y)
 			}
