@@ -124,7 +124,7 @@ fileprivate class SafeAreaHandlerIOS11: SafeAreaHandler {
 		}
 		else if isAttachTop {
 			tableViewOffset = -navigationAndSafeAreaOffset
-			if isAnimation && navigationBar != nil {
+			if  navigationBar != nil && (isAnimation || !(scrollView?.isDragging ?? true)){
 				tableViewOffset = -navigationBarHeight
 			}
 		}
