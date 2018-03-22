@@ -16,6 +16,8 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
     fileprivate weak var backgroundView:UIView?
 	private var tabGestureDelegate:TapGestureDelegate?
     fileprivate var presentDuration = defaulDuration
+	//For transitioningDelegate
+	fileprivate var animatedTransition: AnimatedTransition?
 	
 	weak var delegate:KKOverlayPresentingViewControllerDelegate?
     
@@ -170,41 +172,48 @@ open class OverlayModalViewController: UIViewController, UIViewControllerTransit
 }
 
 extension OverlayModalViewController {
+	
 	public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-		guard let bgView = self.backgroundView else {
+		guard let backgroundView = self.backgroundView else {
 			return nil
 		}
-		let animator = SwipeAnimator(backgroundView: bgView)
-		animator.transitonTo = .present
-		return animator
+		self.animatedTransition = AnimatedTransition(backgroundView: backgroundView)
+		self.animatedTransition?.purpose = .present
+		return self.animatedTransition
 	}
 	
 	public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-		guard let bgView = self.backgroundView else {
-			return nil
-		}
-		let animator = SwipeAnimator(backgroundView: bgView)
-		animator.transitonTo = .dismiss
-		return animator
+		self.animatedTransition?.purpose = .dismiss
+		return self.animatedTransition
 	}
 }
 
-class SwipeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-	enum SwipeTo {
+fileprivate class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
+	enum Purpose {
 		case present
 		case dismiss
 	}
 	
-	var transitonTo:SwipeTo = .present
+	var purpose:Purpose = .present
 	let backgroundView:UIView
 	let animationTime: TimeInterval = 0.3
+	var preSafeArea:CGFloat = 0
 	
 	init(backgroundView:UIView) {
 		self.backgroundView = backgroundView
 	}
 	
 	func animationEnded(_ transitionCompleted: Bool) {
-		UIApplication.shared.keyWindow?.rootViewController?.view.setNeedsLayout()
+		if let rootViewController = UIApplication.shared.keyWindow?.rootViewController, let rootView = rootViewController.view {
+			let statusBarHeight = UIApplication.shared.statusBarFrame.height
+			var safeAreaTop:CGFloat = 0
+			if #available(iOS 11.0, *) {
+				safeAreaTop = rootView.safeAreaInsets.top
+			}
+			let marginTop:CGFloat = preSafeArea != 0 ? statusBarHeight - preSafeArea : 0
+			rootView.frame.origin.y = marginTop
+			self.preSafeArea = safeAreaTop
+		}
 	}
 	
 	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -214,7 +223,7 @@ class SwipeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 		let containerFrame = transitionContext.containerView.bounds
 		let outFrame = CGRect(x: 0, y: containerFrame.height, width: containerFrame.width, height: containerFrame.height)
-		if (self.transitonTo == .present) {
+		if (self.purpose == .present) {
 			if let toView = transitionContext.view(forKey: .to) {
 				transitionContext.containerView.addSubview(self.backgroundView)
 				self.backgroundView.translatesAutoresizingMaskIntoConstraints = false
@@ -228,7 +237,7 @@ class SwipeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 				UIView.animate(withDuration: animationTime, delay: 0, options: .curveEaseOut, animations:  {
 					toView.frame = containerFrame
 				}, completion: { (completion:Bool) -> Void in
-					transitionContext.completeTransition(true)
+					self.transitionComplete(transitionContext)
 				})
 			}
 		} else {
@@ -237,12 +246,17 @@ class SwipeAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 					fromView.frame = outFrame
 				}, completion: { completion in
 					self.backgroundView.removeFromSuperview()
-					transitionContext.completeTransition(true)
+					self.transitionComplete(transitionContext)
 				})
 			}
 		}
-		let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!
-		// Fix layout bug in iOS 9+
-		toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
+	}
+	
+	private func transitionComplete(_ transitionContext: UIViewControllerContextTransitioning) {
+		if let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) {
+			// Fix layout bug in iOS 9+
+			toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
+		}
+		transitionContext.completeTransition(true)
 	}
 }
