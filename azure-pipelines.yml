@@ -23,5 +23,5 @@ steps:
     scheme: ''
     sdk: 'iphoneos'
     configuration: 'Release'
-    xcWorkspacePath: 'Example/OverlayModalViewController.xcodeproj/project.xcworkspace'
-    xcodeVersion: '9'
+    xcWorkspacePath: 'Example/OverlayModalViewController.xcworkspace'
+    xcodeVersion: 'default'
