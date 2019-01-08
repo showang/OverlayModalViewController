@@ -10,6 +10,13 @@ pool:
   vmImage: 'macOS-10.13'
 
 steps:
+# CocoaPods
+# CocoaPods is a dependency manager for Swift and Objective-C Cocoa projects. This task runs 'pod install'.
+- task: CocoaPods@0
+  inputs:
+    #workingDirectory: # Optional
+    forceRepoUpdate: true
+    #projectDirectory: # Optional
 - task: Xcode@5
   inputs:
     actions: 'build'
