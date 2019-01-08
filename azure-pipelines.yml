@@ -24,4 +24,4 @@ steps:
     sdk: 'iphoneos'
     configuration: 'Release'
     xcWorkspacePath: 'Example/OverlayModalViewController.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+    xcodeVersion: '9'
